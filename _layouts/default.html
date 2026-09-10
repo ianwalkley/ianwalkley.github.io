@@ -196,29 +196,31 @@
             Version: {{ site.time | date: "%Y%m%d%H%M%S" }}
         </div>
     </footer>
-</body>
-</html>
-<!--mobile back button fix for Bootstrap 5 navbar collapse menu-->
-<script>
-    window.addEventListener('pageshow', function (event) {
-        // Check if the page was loaded from the browser's back/forward cache
-        if (event.persisted) {
-            var navbarCollapse = document.getElementById('navbarSupportedContent');
-            var navbarToggler = document.querySelector('.navbar-toggler');
 
-            if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-                // Remove Bootstrap classes that keep the menu open
-                navbarCollapse.classList.remove('show');
+    <!--mobile back button fix for Bootstrap 5 navbar collapse menu-->
+    <script>
+        window.addEventListener('pageshow', function (event) {
+            // Check if the page was loaded from the browser's back/forward cache
+            if (event.persisted) {
+                var navbarCollapse = document.getElementById('navbarSupportedContent');
+                var navbarToggler = document.querySelector('.navbar-toggler');
 
-                // Reset the toggle button's state for accessibility
-                if (navbarToggler) {
-                    navbarToggler.classList.add('collapsed');
-                    navbarToggler.setAttribute('aria-expanded', 'false');
+                if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                    // Remove Bootstrap classes that keep the menu open
+                    navbarCollapse.classList.remove('show');
+
+                    // Reset the toggle button's state for accessibility
+                    if (navbarToggler) {
+                        navbarToggler.classList.add('collapsed');
+                        navbarToggler.setAttribute('aria-expanded', 'false');
+                    }
                 }
             }
-        }
-    });
-</script>
+        });
+    </script>
+
+</body>
+</html>
 
 <!-- Added Bootstrap Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
