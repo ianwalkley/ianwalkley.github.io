@@ -196,29 +196,6 @@
             Version: {{ site.time | date: "%Y%m%d%H%M%S" }}
         </div>
     </footer>
-
-    <!--mobile back button fix for Bootstrap 5 navbar collapse menu-->
-    <script>
-        window.addEventListener('pageshow', function (event) {
-            // Check if the page was loaded from the browser's back/forward cache
-            if (event.persisted) {
-                var navbarCollapse = document.getElementById('navbarSupportedContent');
-                var navbarToggler = document.querySelector('.navbar-toggler');
-
-                if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-                    // Remove Bootstrap classes that keep the menu open
-                    navbarCollapse.classList.remove('show');
-
-                    // Reset the toggle button's state for accessibility
-                    if (navbarToggler) {
-                        navbarToggler.classList.add('collapsed');
-                        navbarToggler.setAttribute('aria-expanded', 'false');
-                    }
-                }
-            }
-        });
-    </script>
-
 </body>
 </html>
 
@@ -316,5 +293,27 @@
                 }
             }
         });
+    });
+</script>
+
+<!--mobile back button fix for Bootstrap 5 navbar collapse menu-->
+<script>
+    window.addEventListener('pageshow', function (event) {
+        // Check if the page was loaded from the browser's back/forward cache
+        if (event.persisted) {
+            var navbarCollapse = document.getElementById('navbarSupportedContent');
+            var navbarToggler = document.querySelector('.navbar-toggler');
+
+            if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                // Remove Bootstrap classes that keep the menu open
+                navbarCollapse.classList.remove('show');
+
+                // Reset the toggle button's state for accessibility
+                if (navbarToggler) {
+                    navbarToggler.classList.add('collapsed');
+                    navbarToggler.setAttribute('aria-expanded', 'false');
+                }
+            }
+        }
     });
 </script>
