@@ -198,6 +198,27 @@
     </footer>
 </body>
 </html>
+<!--mobile back button fix for Bootstrap 5 navbar collapse menu-->
+<script>
+    window.addEventListener('pageshow', function (event) {
+        // Check if the page was loaded from the browser's back/forward cache
+        if (event.persisted) {
+            var navbarCollapse = document.getElementById('navbarSupportedContent');
+            var navbarToggler = document.querySelector('.navbar-toggler');
+
+            if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                // Remove Bootstrap classes that keep the menu open
+                navbarCollapse.classList.remove('show');
+
+                // Reset the toggle button's state for accessibility
+                if (navbarToggler) {
+                    navbarToggler.classList.add('collapsed');
+                    navbarToggler.setAttribute('aria-expanded', 'false');
+                }
+            }
+        }
+    });
+</script>
 
 <!-- Added Bootstrap Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
@@ -206,7 +227,6 @@
 
 <!-- 2. Load the local UMD JavaScript file -->
 <!--<script src="cookieconsent.umd.js"></script>-->
-
 <!-- 2. Load the CDN UMD JavaScript file -->
 <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3.1.0/dist/cookieconsent.umd.min.js"></script>
 
