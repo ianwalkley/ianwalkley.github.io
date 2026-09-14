@@ -36,6 +36,10 @@ jobs:
           npx playwright install --with-deps chromium
 
       - name: Run Headless Audit
+        env:
+          # Dynamically splits 'owner/repo' to build 'https://github.io'
+          TARGET_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+        
         run: node ./scan.js
 
       - name: Push Data Back to Git

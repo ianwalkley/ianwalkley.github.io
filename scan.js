@@ -4,10 +4,14 @@ import { chromium } from 'playwright';
 
 // Configuration
 //const TARGET_URL = 'https://jobnetcrest.github.io';
-const TARGET_URL = 'https://ianwalkley.github.io';
+const TARGET_URL = process.env.TARGET_URL;
 const OUTPUT_FILE = 'cookie-database.json';
 
 async function scanCookies() {
+    if (!TARGET_URL) {
+        throw new Error('❌ TARGET_URL environment variable is missing.');
+    }
+
     console.log(`🕵️ Scanning ${TARGET_URL}...`);
     
     // Launch headless browser
