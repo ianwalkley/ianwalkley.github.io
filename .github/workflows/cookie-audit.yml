@@ -39,19 +39,22 @@ jobs:
         run: node ./scan.js
 
       - name: Push Data Back to Git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "CookieScannerBot"
           git config --global user.email "bot@github.com"
           
-          # Stage the file
-          git add cookie-database.json
-          
-          # Check if there are any changes staged for commit
-          if git diff --cached --quiet; then
-            echo "No changes found in cookie profiles. Skipping commit."
-          else
-            git commit -m "chore: auto-updated active cookie catalog [skip ci]"
-            git push
+          # Check if the file has actually changed on disk before staging it
+          if git diff --quiet cookie-database.json; then
+            echo "No changes found in cookie profiles. Ending workflow successfully."
+            exit 0
           fi
+
+          # If changes exist, stage, commit, and push them
+          git add cookie-database.json
+          git commit -m "chore: auto-updated active cookie catalog [skip ci]"
+          git push
+
 
 
