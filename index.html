@@ -8,13 +8,16 @@ background_image: ""
   The 'position-relative z-index' rule guarantees your elements stack 
   completely above your background flag layer.
 -->
-<div class="container pt-4 position-relative hero-container">
+<!-- 🟢 MATCHED STEP 1: Top spacing container that keeps layout uniform -->
+<div class="pt-1 position-relative hero-container">
 
-    <!-- 2. WIDE HERO SUBTEXT -->
+    <!-- 🟢 MATCHED STEP 2: Identical wrapper block copied from the League page structure -->
     <div class="container-fluid px-3 px-md-4 py-2 text-center">
-      <p class="fs-5 fs-md-4 text-black fw-bold mt-2 mt-md-4 w-75 mx-auto hero-subtext">
+      <p class="fs-5 fs-md-4 text-black fw-bold mt-2 mb-2 mt-md-4 w-75 mx-auto hero-subtext">
         Pickleball Gloucestershire is the county's friendly hub for the nation's fastest-growing racket sport. 
       </p>
+      <!-- Green decorative accent divider to keep pages looking uniform -->
+      <div class="mx-auto" style="width: 120px; height: 4px; background-color: #25D366;"></div>
     </div>
 
     <!-- 3. HERO BOOTSTRAP CAROUSEL -->
@@ -48,7 +51,7 @@ background_image: ""
           <!-- Slide 2 -->
           <div class="carousel-item">
             <div class="w-100 h-100 bg-dark position-absolute opacity-25 overlay-layer"></div>
-            <img src="images/Gallery/gallery7.jpg" class="d-block w-100 object-fit-cover carousel-img" alt="All Ages & Abilities">
+            <img src="images/Gallery/main/gallery7.jpg" class="d-block w-100 object-fit-cover carousel-img" alt="All Ages & Abilities">
             <div class="carousel-caption px-3 main-caption">
               <h5 class="display-6 display-md-4 fw-bold mb-2 text-uppercase tracking-wide text-white text-shadow-heavy">
                 All Ages & Abilities
@@ -62,7 +65,7 @@ background_image: ""
           <!-- Slide 3 -->
           <div class="carousel-item">
             <div class="w-100 h-100 bg-dark position-absolute opacity-25 overlay-layer"></div>
-            <img src="images/Gallery/gallery10.jpg" class="d-block w-100 object-fit-cover carousel-img" alt="Learn & Socialise">
+            <img src="images/Gallery/main/gallery10.jpg" class="d-block w-100 object-fit-cover carousel-img" alt="Learn & Socialise">
             <div class="carousel-caption px-3 main-caption">
               <h5 class="display-6 display-md-4 fw-bold mb-2 text-uppercase tracking-wide text-white text-shadow-heavy">
                 Learn & Socialise
@@ -88,4 +91,109 @@ background_image: ""
       </div>
     </div>
 
+    </div> <!-- 🟢 EXACT CHANGE 1: Closes .carousel-wrapper -->
+</div> <!-- 🟢 EXACT CHANGE 2: Closes .hero-container -->
+
+
+
+<!-- 🟢 EXACT CHANGE 3: Added 'mt-4' for standard Bootstrap vertical spacing -->
+<div class="club-ticker-container mt-4" id="ticker-box">
+  <div class="club-ticker-label">📌 CLUB NEWS</div>
+  <div class="club-ticker-wrap">
+    <div class="club-ticker-content" id="club-ticker">
+      <!-- FALLBACK TEXT (Shows if feed fails, or if posts are older than 7 days) -->
+      <span class="ticker-item">🏓 Welcome to Pickleball Gloucestershire! Join the fastest-growing sport.</span>
+      <span class="ticker-item">⚡ Master the dink and stay out of the kitchen! Check our posts for court schedules.</span>
+    </div>
+  </div>
 </div>
+
+<script>
+  function loadLiveTicker() {
+    const blogDomain = "pickleball-gloucestershire.blogspot.com";
+    const script = document.createElement('script');
+    script.src = "https://pickleball-gloucestershire.blogspot.com/feeds/posts/default?alt=json-in-script&callback=processLiveTicker&max-results=3";
+    
+    script.onerror = function() { 
+      console.log("Blogger feed unreachable. Using fallback text."); 
+      resetStaticLoop();
+    };
+    document.body.appendChild(script);
+  }
+
+  function processLiveTicker(json) {
+    // Robust structural sanity checks to prevent 'undefined' crashes
+    if (!json?.feed?.entry || json.feed.entry.length === 0) {
+      resetStaticLoop();
+      return;
+    }
+    
+    try {
+      let entries = json.feed.entry;
+      
+      // Target the date of the single newest entry safely
+      let dateString = entries[0]?.published?.$t || entries[0]?.updated?.$t;
+      if (!dateString) {
+        resetStaticLoop();
+        return;
+      }
+
+      let newestPostDate = new Date(dateString);
+      let currentDate = new Date();
+      let timeDifference = currentDate.getTime() - newestPostDate.getTime();
+      let daysDifference = timeDifference / (1000 * 3600 * 24);
+      
+      // If the latest post is older than 7 days, fallback to the hardcoded loop
+      if (daysDifference > 7) {
+        resetStaticLoop();
+        return;
+      }
+      
+      let tickerHTML = "";
+      for (let i = 0; i < entries.length; i++) {
+        let entry = entries[i];
+        let title = entry?.title?.$t || "Latest Update";
+        
+        // Find alternate browser link item safely
+        let linkObj = entry?.link?.find(l => l.rel === 'alternate');
+        let link = linkObj ? linkObj.href : `https://pickleball-gloucestershire.blogspot.com`;
+        
+        // Handle dates safely
+        let rawDate = entry?.published?.$t;
+        let formattedDate = "";
+        if (rawDate) {
+          let publishedDate = new Date(rawDate);
+          let day = publishedDate.getDate();
+          let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+          let month = months[publishedDate.getMonth()];
+          formattedDate = ` <span class="ticker-date">[${day} ${month}]</span>`;
+        }
+        
+    
+        tickerHTML += `<a href="${link}" class="ticker-item" target="_blank" rel="noopener"><img src="images/PBGlos-Logo.png" alt="PBGlos Logo" class="ticker-logo"> ${title}${formattedDate}</a>`;
+
+        
+      }
+      
+      const tickerContainer = document.getElementById('club-ticker');
+      tickerContainer.innerHTML = tickerHTML + tickerHTML;
+      
+    } catch (error) {
+      console.error("Ticker processing encountered a structural error: ", error);
+      resetStaticLoop();
+    }
+  }
+
+  function resetStaticLoop() {
+    const container = document.getElementById('club-ticker');
+    if (container) {
+      container.innerHTML = container.innerHTML + container.innerHTML;
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadLiveTicker);
+  } else {
+    loadLiveTicker();
+  }
+</script>

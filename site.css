@@ -184,8 +184,7 @@ td {
 .gallery-item {
     position: relative;
     width: calc(33.333% - 10px);
-    height: 300px;
-    background: #000;
+    background: transparent;
     border-radius: 5px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -208,16 +207,33 @@ td {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.7);
+    /* 🌟 UPDATED: Deep, rich brand-green overlay mask (85% opacity) */
+    background: rgba(18, 102, 49, 0.85); 
     color: #fff;
     text-align: center;
-    padding: 10px;
+    padding: 15px;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
 .gallery-item:hover .gallery-overlay {
     opacity: 1;
+}
+
+/* 🌟 ADD ONLY THIS TO THE BOTTOM OF SECTION 6 */
+.gallery-item {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
 }
 
 /* Premium Hover Utilities */
@@ -249,9 +265,46 @@ td {
   cursor: pointer;
 }
 
-.gallery-thumb {
-  height: 300px;
+/* ==========================================================================
+   6. LEGACY & MODERN GALLERIES
+   ========================================================================== */
+.gallery-hover-wrapper { 
+    cursor: pointer; 
 }
+
+.transition-img { 
+    transition: transform 0.4s ease-in-out; 
+}
+
+.transition-overlay { 
+    background: rgba(18, 102, 49, 0.85); /* Club Brand Green */
+    transition: opacity 0.3s ease-in-out; 
+    z-index: 2; 
+}
+
+.gallery-hover-wrapper:hover .transition-overlay { 
+    opacity: 1 !important; 
+}
+
+.gallery-hover-wrapper:hover .transition-img { 
+    transform: scale(1.06); 
+}
+
+.gallery-item {
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Lightbox Max-Height Guard: stops vertical pop-up spillages on small laptop views */
+#lightbox-img {
+    max-height: 70vh;
+    object-fit: contain;
+}
+
 
 
 /* ==========================================================================
@@ -346,9 +399,20 @@ td {
   position: relative;
 }
 
-.calendar-container {
-  min-height: 400px;
-  border: 1px solid #e9e6ec;
+/* Fix mobile height scroll conflicts for the Elfsight calendar */
+@media (max-width: 991.98px) {
+  .calendar-container {
+    min-height: 600px !important; /* Force a minimum height so it doesn't collapse */
+    overflow-y: auto !important;   /* Allows standard touch momentum scrolling */
+    -webkit-overflow-scrolling: touch; /* Ensures smooth scrolling on iPhones/iOS */
+  }
+}
+
+/* Forces the internal Elfsight widget frame to conform to 100% screen width */
+.calendar-container iframe, 
+.calendar-container div[class^="elfsight-app-"] {
+  width: 100% !important;
+  min-width: 100% !important;
 }
 
 /* Header Utilities */
@@ -600,7 +664,14 @@ td {
     min-height: 320px; /* Aligns map heights evenly with left table margins */
   }
 }
-
+<style>
+  #clubFAQAccordion .accordion-button::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://w3.org' viewBox='0 0 16 16' fill='%237BC143'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+  }
+  #clubFAQAccordion .accordion-button:focus {
+    box-shadow: none !important;
+  }
+</style>
 /* ==========================================================================
    13. NEWS & UPDATES (SOCIAL FEEDS & BLOG IFRAMES)
    ========================================================================== */
@@ -724,3 +795,85 @@ td {
   font-size: 0.85em;
   color: #d63384;
 }
+/* ==========================================================================
+   16. BREAKING NEWS TICKER
+   ========================================================================== */
+
+
+/* ==========================================================================
+   9. BRANDED CLUB NEWS TICKER
+   ========================================================================== */
+.club-ticker-container {
+    display: flex;
+    align-items: center;
+    background: #234b58; /* UPDATED: Dark Slate Blue from your navbar/divider theme */
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    height: 40px;
+    border-bottom: 2px solid #126631; /* ADDED: Subtle Club Green underline anchor */
+}
+
+.club-ticker-label {
+    background: #E5F91e; /* UPDATED: Bright Pickleball Yellow from the logo's ball */
+    color: #234b58;      /* UPDATED: Dark Slate Blue text for high-contrast legibility */
+    padding: 0 15px;
+    font-weight: bold;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+    white-space: nowrap;
+    box-shadow: 3px 0 5px rgba(0,0,0,0.3);
+}
+
+.club-ticker-wrap {
+    overflow: hidden;
+    width: 100%;
+    z-index: 1;
+}
+
+.club-ticker-content {
+    display: flex;
+    white-space: nowrap;
+    animation: tickerLoop 25s linear infinite;
+}
+
+/* MERGED: Combined both .ticker-item definitions into one clean block */
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-weight: bold;
+    padding-right: 100px;
+    gap: 8px; /* Adds space between the logo image and the text */
+}
+
+.ticker-logo {
+    height: 20px;      /* Restricts the height to match your text size */
+    width: auto;       /* Keeps the original aspect ratio of your logo */
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+.ticker-date {
+    font-weight: normal;
+    font-size: 0.9em;
+    opacity: 0.85;
+    margin-left: 5px;
+}
+
+.ticker-item:hover {
+    text-decoration: underline !important;
+    color: #E5F91e !important; /* ADDED: Turns yellow on hover for interactive feedback */
+}
+
+.club-ticker-content:hover {
+    animation-play-state: paused;
+}
+
+@keyframes tickerLoop {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
