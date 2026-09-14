@@ -49,9 +49,11 @@ async function scanCookies() {
         }
     }
     
-    // Ensure target folder exists and write JSON using async fs/promises
+    // Ensure target folder exists if it's nested, then write JSON
     const dir = path.dirname(OUTPUT_FILE);
-    await fs.mkdir(dir, { recursive: true });
+    if (dir !== '.') {
+        await fs.mkdir(dir, { recursive: true });
+    }
     
     await fs.writeFile(OUTPUT_FILE, JSON.stringify(categorised, null, 2), 'utf8');
     console.log(`💾 Fresh audit database deployed to ${OUTPUT_FILE}!`);
