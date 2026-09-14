@@ -36,7 +36,7 @@ jobs:
           npx playwright install --with-deps chromium
 
       - name: Run Headless Audit
-        run: node scan.js
+        run: node ./scan.js
 
       - name: Push Data Back to Git
         run: |
