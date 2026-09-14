@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 // Configuration
 //const TARGET_URL = 'https://jobnetcrest.github.io';
 const TARGET_URL = 'https://ianwalkley.github.io';
-const OUTPUT_FILE = 'cookie-database.json';
+const OUTPUT_FILE = './cookie-database.json';
 
 async function scanCookies() {
     console.log(`🕵️ Scanning ${TARGET_URL}...`);
