@@ -43,14 +43,15 @@ jobs:
           git config --global user.name "CookieScannerBot"
           git config --global user.email "bot@github.com"
           
-          # Force add if the folder structure was just generated
+          # Stage the file
           git add cookie-database.json
           
-          if ! git diff-index --quiet HEAD; then
+          # Check if there are any changes staged for commit
+          if git diff --cached --quiet; then
+            echo "No changes found in cookie profiles. Skipping commit."
+          else
             git commit -m "chore: auto-updated active cookie catalog [skip ci]"
             git push
-          else
-            echo "No changes found in cookie profiles."
           fi
 
 
